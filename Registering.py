@@ -4,7 +4,7 @@ import re
 import json
 import logging
 
-logging.basicConfig(filename='US_logs.log', filemode='w', level=logging.INFO,
+logging.basicConfig(filename='US_logs.log', filemode='a', level=logging.INFO,
                     format='%(levelname)s*%(asctime)s -%(name)s -%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 
@@ -53,7 +53,7 @@ class RegisterStudent:
 
     @classmethod
     def term_validation(cls):
-        term = find_int_exception("term")
+        term = find_digit_exception("term")
         while term > 8 or term < 1:
             print("select from 1 to 8")
             term = find_int_exception("term")
@@ -72,7 +72,7 @@ class RegisterStudent:
         if term == 1:
             return " "
         else:
-            term = str(term)
+            print(type(student_code))
             if re.search(r'^9920', student_code):
                 file_name = "9920_important.csv"
             else:
@@ -102,7 +102,7 @@ class RegisterStudent:
 
     @classmethod
     def grade(cls):
-        last_grade_ave = find_int_exception("last grade ave")
+        last_grade_ave = find_digit_exception("last grade ave")
         while True:
             if last_grade_ave < 0 or last_grade_ave > 20:
                 logging.error("grade not in range ", exc_info=True)
@@ -134,9 +134,9 @@ def register_student():
     """
     first_name = find_str_exception("first name").capitalize()
     last_name = find_str_exception("last name ").capitalize()
-    term = RegisterStudent.term_validation()
-    student_code = RegisterStudent.student_code_validation()
+    term = str(RegisterStudent.term_validation())
+    student_code = str(RegisterStudent.student_code_validation())
     not_passed_units = RegisterStudent.important_units(term, student_code)
-    last_grade_ave = RegisterStudent.grade()
-    student_id = RegisterStudent.id_validation()
+    last_grade_ave = str(RegisterStudent.grade())
+    student_id = str(RegisterStudent.id_validation())
     return RegisterStudent(first_name, last_name, student_code, term, not_passed_units, last_grade_ave, student_id)
