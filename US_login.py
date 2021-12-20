@@ -2,7 +2,7 @@ import logging
 from US_Exceptions import *
 from US_file_handle import *
 from Registering import user_pass
-import hashlib
+
 
 logging.basicConfig(filename='US_logs.log', filemode='w', level=logging.INFO,
                     format='%(levelname)s*%(asctime)s -%(name)s -%(message)s', datefmt='%d-%b-%y %H:%M:%S')
