@@ -25,7 +25,7 @@ while True:
         if key_2 == 1:
             print("NOT COMPLETED BUT STUDENT OPTION WORKS")
         if key_2 == 2:
-            print("Try id=1111 and pass=99201234 to see log in successfully")
+            print("Try id=1111 and pass=99201111 to see log in successfully")
             result = login_student_info()
             if type(result) != str:
                 print("successfully log in")
@@ -34,7 +34,6 @@ while True:
                 key_3 = find_int_exception("menu key")
                 if key_3 == 1:
                     print(result)
-
                 if key_3 == 2:
                     print("NOT COMPLETED")
                     pass

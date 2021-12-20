@@ -1,2 +1,132 @@
 ERROR*15-Dec-21 22:41:23 -root -Id was not found
 NoneType: None
+WARNING*19-Dec-21 00:13:43 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*19-Dec-21 00:17:23 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*19-Dec-21 00:19:01 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*19-Dec-21 00:20:45 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*19-Dec-21 00:21:39 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*19-Dec-21 00:22:28 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*19-Dec-21 00:23:00 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*19-Dec-21 00:23:39 -root -This is a program for id which starts with 9920
+NoneType: None
+INFO*19-Dec-21 00:25:31 -root -successfully registered
+NoneType: None
+WARNING*19-Dec-21 00:27:56 -root -This is a program for id which starts with 9920
+NoneType: None
+INFO*19-Dec-21 00:29:35 -root -successfully registered
+NoneType: None
+ERROR*19-Dec-21 00:30:33 -root -Id must be 4 numbers
+NoneType: None
+INFO*19-Dec-21 00:37:22 -root -successfully registered
+NoneType: None
+INFO*19-Dec-21 00:37:58 -root -successfully registered
+NoneType: None
+INFO*19-Dec-21 00:45:04 -root -successfully registered
+NoneType: None
+INFO*19-Dec-21 00:45:28 -root -successfully registered
+NoneType: None
+ERROR*19-Dec-21 00:48:08 -root -grade not in range 
+NoneType: None
+INFO*19-Dec-21 00:48:11 -root -this code is available
+NoneType: None
+ERROR*19-Dec-21 00:48:36 -root -Id must be 4 numbers
+NoneType: None
+ERROR*19-Dec-21 00:49:25 -root -Wrong pass
+NoneType: None
+ERROR*19-Dec-21 00:52:56 -root -Wrong pass
+NoneType: None
+ERROR*19-Dec-21 01:17:14 -root -selection not in range 
+Traceback (most recent call last):
+  File "D:\maktab sharif\maktab 65\poroge\phase 1\Registering.py", line 103, in important_units
+    not_passed_units = important_unit_list[selected - 1]
+IndexError: list index out of range
+INFO*19-Dec-21 01:17:27 -root -successfully registered
+NoneType: None
+ERROR*19-Dec-21 01:18:55 -root -selection not in range 
+Traceback (most recent call last):
+  File "D:\maktab sharif\maktab 65\poroge\phase 1\Registering.py", line 103, in important_units
+    not_passed_units = important_unit_list[selected - 1]
+IndexError: list index out of range
+ERROR*19-Dec-21 01:27:02 -root -Wrong pass
+NoneType: None
+INFO*20-Dec-21 23:18:43 -root -this  id code is available
+NoneType: None
+WARNING*20-Dec-21 23:19:39 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:19:46 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:20:20 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:20:27 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:23:44 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:23:50 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:24:16 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:24:18 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:24:34 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:24:40 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:25:48 -root -This is a program for id which starts with 9920
+NoneType: None
+ERROR*20-Dec-21 23:25:52 -root -grade not in range 
+NoneType: None
+WARNING*20-Dec-21 23:25:54 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:26:11 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:26:15 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:27:31 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:27:36 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:27:46 -root -This is a program for id which starts with 9920
+NoneType: None
+ERROR*20-Dec-21 23:27:52 -root -Id must be 4 numbers
+NoneType: None
+WARNING*20-Dec-21 23:27:54 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:31:07 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:31:11 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:31:25 -root -This is a program for id which starts with 9920
+NoneType: None
+ERROR*20-Dec-21 23:31:28 -root -Id must be 4 numbers
+NoneType: None
+WARNING*20-Dec-21 23:31:29 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:32:37 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:32:39 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:32:52 -root -This is a program for id which starts with 9920
+NoneType: None
+ERROR*20-Dec-21 23:32:53 -root -grade not in range 
+NoneType: None
+WARNING*20-Dec-21 23:32:57 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:33:28 -root -This is a program for id which starts with 9920
+NoneType: None
+WARNING*20-Dec-21 23:33:31 -root -This is a program for id which starts with 9920
+NoneType: None
+INFO*20-Dec-21 23:59:33 -root -successfully registered
+NoneType: None
+INFO*21-Dec-21 00:09:12 -root -successfully registered
+NoneType: None
+ERROR*21-Dec-21 00:20:27 -root -Id must be 4 numbers
+NoneType: None
+INFO*21-Dec-21 00:21:56 -root -successfully registered
+NoneType: None

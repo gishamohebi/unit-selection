@@ -3,9 +3,16 @@ from US_file_handle import *
 import re
 import json
 import logging
+import hashlib
 
 logging.basicConfig(filename='US_logs.log', filemode='a', level=logging.INFO,
                     format='%(levelname)s*%(asctime)s -%(name)s -%(message)s', datefmt='%d-%b-%y %H:%M:%S')
+
+
+def user_pass(user_name, password):
+    user_name = user_name.encode()
+    password = password.encode()
+    return [hashlib.sha256(user_name).hexdigest(), hashlib.sha256(password).hexdigest()]
 
 
 class RegisterStudent:
@@ -25,22 +32,32 @@ class RegisterStudent:
         self.student_id = student_id
 
     def write_to_file(self):
+
         if re.search(r'^9920', self.student_code):
-            my_data = read_data_in_file("9920.csv", "student_code")
-            if self.student_code not in my_data:
-                register_student_file_writing("9920.csv", self)
-                print("successfully registered!")
-                logging.info("successfully registered", exc_info=True)
+            my_passwords = read_data_in_file("9920/9920.csv", "student_code")
+            my_id = read_data_in_file("9920/9920.csv", "id")
+            if self.student_id not in my_id:
+                if self.student_code not in my_passwords:
+                    register_student_file_writing("9920/9920.csv", self)
+                    self.student_id = user_pass(self.student_id, self.student_code)[0]
+                    self.student_code = user_pass(self.student_id, self.student_code)[1]
+                    writing_up_file(self.student_id, self.student_code, "9920/student_UP.csv")
+                    print("successfully registered!")
+                    logging.info("successfully registered", exc_info=True)
+                else:
+                    print("this student code is available")
+                    logging.info("this  student code is available", exc_info=True)
             else:
-                print("this code is available")
-                logging.info("this code is available", exc_info=True)
+                print("this id code is available")
+                logging.info("this  id code is available", exc_info=True)
+
         else:
             print("This app is for id which starts with 9920")
             logging.warning("This is a program for id which starts with 9920", exc_info=True)
             info = self.__dict__
             with open('others.json', "a") as myfile:  # writing json file
                 json.dump(info, myfile)
-                print("You were added to others.json successfully")
+            print("You were added to others.json successfully")
 
     @classmethod
     def student_code_validation(cls):
@@ -49,11 +66,12 @@ class RegisterStudent:
             print("this must take 8 numbers")
             student_code = find_digit_exception("student code")
             if len(student_code) == 8:
-                return student_code
+                print(student_code)
+        return student_code
 
     @classmethod
     def term_validation(cls):
-        term = find_digit_exception("term")
+        term = find_int_exception("term")
         while term > 8 or term < 1:
             print("select from 1 to 8")
             term = find_int_exception("term")
@@ -72,9 +90,9 @@ class RegisterStudent:
         if term == 1:
             return " "
         else:
-            print(type(student_code))
+            term = str(term)
             if re.search(r'^9920', student_code):
-                file_name = "9920_important.csv"
+                file_name = "9920/9920_important.csv"
             else:
                 print("This app is for id which starts with 9920")
                 logging.warning("This is a program for id which starts with 9920", exc_info=True)
@@ -82,11 +100,14 @@ class RegisterStudent:
                 return not_passed_units
             important_unit_list = read_data_in_file(file_name, term)  # this is a list of important units of that term
             print(f"Select your not passed units number")
-            print("Select 0 if there is not any")
+            for i in range(len(important_unit_list)):
+                if important_unit_list[i] == "":
+                    important_unit_list.pop(i)
             while True:
                 try:
                     for i, itme in enumerate(important_unit_list):
                         print(f"{i + 1} : {itme} \n")
+                    print("Select 0 if there is not any")
                     selected = find_int_exception("not passed unit")
                     if selected == 0:
                         not_passed_units = " "
@@ -94,7 +115,8 @@ class RegisterStudent:
                     if selected != 0:
                         not_passed_units = important_unit_list[selected - 1]
                         return not_passed_units
-                except IndexError as e:
+                except IndexError:
+
                     logging.error("selection not in range ", exc_info=True)
                     print("select from below")
                 else:
@@ -102,7 +124,7 @@ class RegisterStudent:
 
     @classmethod
     def grade(cls):
-        last_grade_ave = find_digit_exception("last grade ave")
+        last_grade_ave = find_int_exception("last grade ave")
         while True:
             if last_grade_ave < 0 or last_grade_ave > 20:
                 logging.error("grade not in range ", exc_info=True)
@@ -139,4 +161,5 @@ def register_student():
     not_passed_units = RegisterStudent.important_units(term, student_code)
     last_grade_ave = str(RegisterStudent.grade())
     student_id = str(RegisterStudent.id_validation())
+
     return RegisterStudent(first_name, last_name, student_code, term, not_passed_units, last_grade_ave, student_id)

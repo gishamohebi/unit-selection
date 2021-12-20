@@ -31,6 +31,17 @@ def register_student_file_writing(file_name, self):
             fieldnames[2]: self.term,
             fieldnames[3]: self.not_passed_units,
             fieldnames[4]: self.last_grade_ave,
-            fieldnames[5]: self.id
+            fieldnames[5]: self.student_id
 
+        })
+
+
+def writing_up_file(user_name, password, name_of_file):
+    with open(name_of_file, "a") as my_file:
+        writer = csv.DictWriter(my_file, fieldnames=["user_name", "password"])
+        if my_file.tell() == 0:
+            writer.writeheader()
+        writer.writerow({
+            "user_name": user_name,
+            "password": password
         })

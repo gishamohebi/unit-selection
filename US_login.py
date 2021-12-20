@@ -1,6 +1,8 @@
 import logging
 from US_Exceptions import *
 from US_file_handle import *
+from Registering import user_pass
+import hashlib
 
 logging.basicConfig(filename='US_logs.log', filemode='w', level=logging.INFO,
                     format='%(levelname)s*%(asctime)s -%(name)s -%(message)s', datefmt='%d-%b-%y %H:%M:%S')
@@ -48,26 +50,29 @@ class LoginCheck:
         Check if students log in correctly
         return result of searching students file
         """
-        my_id = read_data_in_file("9920.csv", "id")
-        my_pass = read_data_in_file("9920.csv", "student_code")
-        my_data = read_data_in_file("9920.csv")
+        my_id = read_data_in_file("9920/student_UP.csv", "user_name")
+        my_pass = read_data_in_file("9920/student_UP.csv", "password")
+        my_data = read_data_in_file("9920/9920.csv")
+        self.user_id = user_pass(self.user_id, self.password)[0]
         for i in my_id:
-            if hash(i) == hash(self.user_id):
+            if i == self.user_id:
+                self.password = user_pass(self.user_id, self.password)[1]
                 for j in my_pass:
-                    if hash(j) == hash(self.password):
+                    if j == self.password:
                         for k in range(len(my_data)):
-                            if my_data[k]["student_code"] == self.password:
+                            student_code = user_pass(my_data[k]["id"], my_data[k]["student_code"])[1]
+                            if student_code == self.password:
+                                student_code = my_data[k]["student_code"]
+                                student_id = my_data[k]["id"]
                                 name = my_data[k]["name"]
                                 term = my_data[k]["term"]
                                 not_passed_units = my_data[k]["not_passed_units"]
                                 last_grade_ave = my_data[k]["last_grade_ave"]
-                                return Student(name, self.password, term, not_passed_units, last_grade_ave,
-                                               self.user_id)
+                                return Student(name, student_code, term, not_passed_units, last_grade_ave,
+                                               student_id)
                         # line 62 : This object can select, units or display of it's information
                         break
                     else:
-                        print(hash(j))
-                        print((hash(self.password)))
                         logging.error("Wrong pass", exc_info=True)
                         return f"Wrong pass"
                     # NOT COMPLETE
@@ -87,7 +92,7 @@ class LoginCheck:
         pass
 
     @staticmethod
-    def wrong_login():
+    def wrong_login(result, obj, method):
         """
         Check times of wrong logging in
         return alert
@@ -176,5 +181,5 @@ def login_responsible_info():
     responsible_id = id_validation()
     responsible_pass = password_validation()
     user = LoginCheck(responsible_id, responsible_pass)
-    result = user.responsible_check()
+    result = user.responsible_check
     return result
