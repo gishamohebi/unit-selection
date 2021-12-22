@@ -1,3 +1,14 @@
+import logging
+
+logging.basicConfig(
+    filename='US_logs.log',
+    filemode='a',
+    level=logging.INFO,
+    format='%(levelname)s*%(asctime)s -%(name)s -%(message)s',
+    datefmt='%d-%b-%y %H:%M:%S'
+)
+
+
 class OutOfRangError(Exception):
     """
     simple class method which print an alert
@@ -17,10 +28,12 @@ def find_str_exception(variable):
     """
     while True:
         str_value = input(f"Add your {variable}: ")
-        if str_value.isalpha() == True:
-            break
-        else:
+        if str_value.isdigit() is True:
             print(f"Please enter your {variable}")
+            logging.error("Wrong input format",exc_info=True)
+        else:
+            break
+
     return str_value
 
 
@@ -37,6 +50,7 @@ def find_int_exception(variable):
         try:
             value = int(input(f"Add your {variable} : "))
         except ValueError:
+            logging.error("Wrong input format", exc_info=True)
             print(" Add integer!!!! ")
         else:
             break
@@ -51,8 +65,9 @@ def find_digit_exception(variable):
     """
     while True:
         str_value = input(f"Add your {variable}: ")
-        if str_value.isdigit() == True:
+        if str_value.isdigit() is True:
             break
         else:
             print(f"Please enter your {variable}")
+            logging.error("Wrong input format", exc_info=True)
     return str_value

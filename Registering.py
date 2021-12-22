@@ -5,11 +5,19 @@ import json
 import logging
 import hashlib
 
-logging.basicConfig(filename='US_logs.log', filemode='a', level=logging.INFO,
-                    format='%(levelname)s*%(asctime)s -%(name)s -%(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(
+    filename='US_logs.log',
+    filemode='a',
+    level=logging.INFO,
+    format='%(levelname)s*%(asctime)s -%(name)s -%(message)s',
+    datefmt='%d-%b-%y %H:%M:%S'
+)
 
 
 def user_pass(user_name, password):
+    """
+    this function returns hashed of the inputs
+    """
     user_name = user_name.encode()
     password = password.encode()
     return [hashlib.sha256(user_name).hexdigest(), hashlib.sha256(password).hexdigest()]
@@ -38,12 +46,14 @@ class RegisterStudent:
             my_id = read_data_in_file("9920/9920.csv", "id")
             if self.student_id not in my_id:
                 if self.student_code not in my_passwords:
-                    register_student_file_writing("9920/9920.csv", self)
-                    self.student_id = user_pass(self.student_id, self.student_code)[0]
-                    self.student_code = user_pass(self.student_id, self.student_code)[1]
+                    info = self.__dict__
+                    file_writing("9920/9920.csv", info)
+                    self.student_id = user_pass(self.student_id, self.student_code)[0]  # creat hash of str
+                    self.student_code = user_pass(self.student_id, self.student_code)[1]  # creat hash of str
                     writing_up_file(self.student_id, self.student_code, "9920/student_UP.csv")
+                    # line 48 writes the new registered student's id and password to the User_Password file
                     print("successfully registered!")
-                    logging.info("successfully registered", exc_info=True)
+                    logging.info(f"Student {self.name} successfully registered", exc_info=True)
                 else:
                     print("this student code is available")
                     logging.info("this  student code is available", exc_info=True)
@@ -135,7 +145,6 @@ class RegisterStudent:
 
     @classmethod
     def id_validation(cls):
-        # THIS FUNCTION IS NOT COMPLETE
         student_id = find_digit_exception("id")
         while True:
             if len(student_id) == 4:
