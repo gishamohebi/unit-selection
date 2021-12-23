@@ -23,7 +23,8 @@ while True:
             print("1.US responsible\n2.Student\n3.Back to main")
             key_2 = find_int_exception("menu key")
             if key_2 == 1:
-                result = LoginCheck.wrong_login(login_responsible)
+                user = login_responsible()
+                result = LoginCheck.check_login(user.responsible_check)
                 if type(result) != str:
                     responsible = result
                     print("successfully log in")
@@ -46,7 +47,8 @@ while True:
                     print(result)
             if key_2 == 2:
                 print("Try id=2222 and pass=99201345 to see log in successfully")
-                result = LoginCheck.wrong_login(login_student)
+                user = login_student()
+                result = LoginCheck.check_login(user.student_check)
                 if type(result) != str:
                     student = result
                     print("successfully log in")

@@ -133,7 +133,7 @@ class LoginCheck:
             return f"Id Not Found"
 
     @staticmethod
-    def wrong_login(input_function):
+    def check_login(input_function):
 
         """
         Check times of wrong logging in
@@ -201,7 +201,7 @@ def get_units():
     capacity = find_int_exception("capacity")
     prerequisites = find_str_exception("prerequisites")
     info = {
-        'lesson_id ' : lesson_id,
+        'lesson_id ': lesson_id,
         'lesson_name': lesson_name,
         'professor_name': professor_name,
         'unit_number': unit_number,
@@ -234,23 +234,21 @@ def password_validation():
 
 def login_student():
     """
-    this function get information and creat object,
-    then return result of a search
+    this function get information and creat object
+
     """
     student_id = id_validation()
     student_pass = password_validation()
     user = LoginCheck(student_id, student_pass)
-    result = user.student_check()
-    return result
+    return user
 
 
 def login_responsible():
     """
-    this function get information and creat object,
-    then return result of a search
+    this function get information and creat object
+
     """
     responsible_id = id_validation()
     responsible_pass = password_validation()
     user = LoginCheck(responsible_id, responsible_pass)
-    result = user.responsible_check()
-    return result
+    return user
