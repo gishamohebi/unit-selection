@@ -1,21 +1,37 @@
 import csv
+import pandas as pd
+import os
+
+
+def pandas_read_data(name_of_file):
+    df = pd.read_csv(name_of_file)
+    final_file = df.to_string()
+    return final_file
 
 
 def read_data_in_file(file_name, header=None):
-    with open(file_name, "r") as f:
-        data_in_file = []
-        my_file = csv.DictReader(f)
-        if header is not None:
-            for row in my_file:
-                data_in_file.append(row[header])
-        else:
-            for row in my_file:
-                data_in_file.append(row)
+    if os.path.exists(file_name):
+        with open(file_name, "r") as f:
+            data_in_file = []
+            my_file = csv.DictReader(f)
+            if header is not None:
+                for row in my_file:
+                    data_in_file.append(row[header])
+            else:
+                for row in my_file:
+                    data_in_file.append(row)
+        return data_in_file
+    else:
+        pass
 
-    return data_in_file
 
 
-def file_writing(name_of_file, info, mode="a"):
+
+def file_writing(name_of_file, info):
+    if os.path.exists(name_of_file):
+        mode = "a"
+    else:
+        mode = "w"
     with open(name_of_file, mode) as my_file:
         fields = info.keys()
         info = [info]

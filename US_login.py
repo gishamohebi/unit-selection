@@ -1,10 +1,15 @@
 from US_Exceptions import *
 from US_file_handle import *
 from Registering import user_pass
+import re
 
 
 class Student:
-    def __init__(self, name, student_code, term, not_passed_units, last_grade_ave, student_id):
+    def __init__(self,
+                 name, student_code,
+                 term, not_passed_units,
+                 last_grade_ave, student_id
+                 ):
         self.name = name
         self.student_code = student_code
         self.term = term
@@ -12,13 +17,17 @@ class Student:
         self.last_grade_ave = last_grade_ave
         self.student_id = student_id
 
-    def unit_selection(self):
+    def unit_selection(self, selected_lesson_id):
         """
         This method will check conditions of selecting and returns a file
         for each student's selection which the name would be student code
 
         """
-        pass
+        unit_data = read_data_in_file("responsible/9920_units.csv")
+        for i in unit_data:
+            if i["lesson_id"] == selected_lesson_id:
+                selected_unit = i
+                return selected_unit
 
     def __str__(self):
         """
@@ -157,6 +166,7 @@ class LoginCheck:
 class Units:
     def __init__(self, student_code):
         self.student_code = student_code
+        self.data_file = None
 
     def unit_availability(self):
         """
@@ -164,7 +174,13 @@ class Units:
         With file opening and searching unit's file
 
         """
-        pass
+        # codes_list = ['9920','9921',other first 4 numbers of a student code]
+        # pattern = an item selected from codes_list
+        # if re.search(r 'pattern', self.student_code)
+        # these lines show the code for more than one field
+        if re.search(r'^9920', self.student_code):
+            self.data_file = pandas_read_data('responsible/9920_units.csv')
+            return self.data_file
 
     @classmethod
     def update_units_file(cls, file_name):
@@ -212,24 +228,23 @@ def get_units():
 
 
 def id_validation():
-    user_id = find_digit_exception("id")
     while True:
+        user_id = find_digit_exception("id")
         if len(user_id) == 4:
             return user_id
         else:
             logging.error("Id must be 4 numbers", exc_info=True)
             print("Id must be 4 numbers")
-            user_id = find_digit_exception("id")
 
 
 def password_validation():
-    password = find_digit_exception("student code")
     while True:
+        password = find_digit_exception("student code")
         if len(password) == 8:
             return password
         if len(password) != 8:
+            logging.error("password must be 8 numbers", exc_info=True)
             print("this must take 8 numbers")
-        password = find_digit_exception("student code")
 
 
 def login_student():
@@ -240,7 +255,8 @@ def login_student():
     student_id = id_validation()
     student_pass = password_validation()
     user = LoginCheck(student_id, student_pass)
-    return user
+    check_user = user.student_check()
+    return check_user
 
 
 def login_responsible():
@@ -251,4 +267,5 @@ def login_responsible():
     responsible_id = id_validation()
     responsible_pass = password_validation()
     user = LoginCheck(responsible_id, responsible_pass)
-    return user
+    check_user = user.responsible_check()
+    return check_user
