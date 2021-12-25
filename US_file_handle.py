@@ -5,8 +5,7 @@ import os
 
 def pandas_read_data(name_of_file):
     df = pd.read_csv(name_of_file)
-    final_file = df.to_string()
-    return final_file
+    return df
 
 
 def read_data_in_file(file_name, header=None):
@@ -25,13 +24,12 @@ def read_data_in_file(file_name, header=None):
         pass
 
 
-
-
-def file_writing(name_of_file, info):
-    if os.path.exists(name_of_file):
-        mode = "a"
-    else:
-        mode = "w"
+def file_writing(name_of_file, info, mode=None):
+    if mode is None:
+        if os.path.exists(name_of_file):
+            mode = "a"
+        else:
+            mode = "w"
     with open(name_of_file, mode) as my_file:
         fields = info.keys()
         info = [info]
@@ -39,6 +37,8 @@ def file_writing(name_of_file, info):
         if my_file.tell() == 0:
             writer.writeheader()
         writer.writerows(info)
+
+
 
 
 def writing_up_file(user_name, password, name_of_file):

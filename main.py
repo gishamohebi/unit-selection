@@ -1,5 +1,6 @@
 from Registering import *
 from US_login import *
+import os
 
 print("THIS IS A PROGRAM FOR STUDENT WHICH ID STARTS WITH 9920\n"
       "OTHERS WILL SIMPLY ADD TO JSON FILE "
@@ -25,7 +26,7 @@ while True:
                 key_1 = OutOfRangError.new()
     if key == 2:
         while True:
-            print("1.US responsible\n"
+            print("1.US Responsible\n"
                   "2.Student\n"
                   "3.Back to main"
                   )
@@ -79,50 +80,45 @@ while True:
                             print(student)
 
                         if key_4 == 2:
-                            available_units = Units(student_code=student.student_code)
-                            available_units = available_units.unit_availability()
-                            print(available_units)
-                            lesson_id_list = read_data_in_file("responsible/9920_units.csv", "lesson_id")
-                            check_selections = []
-                            print("select your lesson id")
                             if os.path.exists(f"selected units/{student.student_code}.csv"):
                                 logging.error(f"{student.name} tried for another selection", exc_info=True)
                                 print("You cannot select units more than once")
                             else:
-                                while True:
-                                    selected_lesson_id = find_digit_exception("lesson id")
-                                    print("enter 0 when you are finished")
-                                    if selected_lesson_id in lesson_id_list:
-                                        if check_selections is not None:
-                                            if selected_lesson_id not in check_selections:
-                                                check_selections.append(selected_lesson_id)
-                                                selected_unit = student.unit_selection(selected_lesson_id)
-                                                file_writing(f"selected units/{student.student_code}.csv",
-                                                             selected_unit
-                                                             )
-                                            else:
-                                                print("you cant select a unit more than once")
-                                        else:
-                                            check_selections.append(selected_lesson_id)
-                                            selected_unit = student.unit_selection(selected_lesson_id)
-                                            file_writing(f"selected units/{student.student_code}.csv",
-                                                         selected_unit
-                                                         )
-                                    display = pandas_read_data(f"selected units/{student.student_code}.csv")
-                                    print(display)
 
-                                    if selected_lesson_id == '0':
-                                        print("Selected Successfully"
-                                              "Wait For Responsible To Confirm")
-                                        logging.info(f"{student.name} successfully selected units",exc_info=True)
-                                        break
-                                    if selected_lesson_id not in lesson_id_list:
-                                        logging.error(f"{student.name} selected not found lesson", exc_info=True)
-                                        print("your lesson id was not found")
+                                while True:
+                                    print("\n* * * Select Your Lesson Id * * *")
+                                    available_units = Units(student_code=student.student_code)
+                                    available_units = available_units.unit_availability()
+                                    print(available_units.to_string())
+                                    print("\nEnter 0000 when you are finished\n ")
+                                    selected_id = id_validation()
+                                    if selected_id != '0000':
+                                        result = student.unit_selection(selected_id)
+                                        if type(result) != str:
+                                            file_writing(f"selected units/{student.student_code}.csv", result)
+
+                                        if type(result) == str:
+                                            print(result)
+                                    if selected_id == "0000":
+                                        if student.units_number >= 10:
+                                            logging.info(f"{student.name} successfully selected units", exc_info=True)
+                                            break
+                                        if student.units_number < 10:
+                                            print(f"you selected {student.units_number} units, at least must be 10")
+                                            logging.error(f"{student.name} submitted before selecting 10 units")
+
+                                    available_units = Units(student_code=student.student_code)
+                                    available_units = available_units.update_units_file(selected_id)
+                                    display = pandas_read_data(f"selected units/{student.student_code}.csv")
+                                    print(f"\n{display.to_string()}")
+                                    print(f"\ntotal selected units >>> {student.units_number}")
 
                         if key_4 == 3:
-                            print(" ")
-                            pass
+                            if os.path.exists(f"selected units/{student.student_code}.csv"):
+                                display = pandas_read_data(f"selected units/{student.student_code}.csv")
+                                print(display.to_string())
+                            else:
+                                print("You did not select any units")
                         if key_4 == 4:
                             break
                         if key_4 > 4 or key_4 < 1:

@@ -68,6 +68,6 @@ def find_digit_exception(variable):
         if str_value.isdigit() is True:
             break
         else:
-            print(f"Please enter your {variable}")
+            print(f"Please enter your {variable} correctly")
             logging.error("Wrong input format", exc_info=True)
     return str_value

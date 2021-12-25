@@ -100,7 +100,7 @@ class RegisterStudent:
     @classmethod
     def important_units(cls, term, student_code):
         """
-        This will help the student and responsible for unit selection validation
+        This will help the student and Responsible for unit selection validation
         param term: digit
         param student_code: digit
         return  not_passed_units: string

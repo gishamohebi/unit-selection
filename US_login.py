@@ -16,18 +16,52 @@ class Student:
         self.not_passed_units = not_passed_units
         self.last_grade_ave = last_grade_ave
         self.student_id = student_id
+        self.selected_units = []  # to check each unit was selected once
+        self.units_number = 0  # to check numbers of selected units
 
     def unit_selection(self, selected_lesson_id):
         """
-        This method will check conditions of selecting and returns a file
-        for each student's selection which the name would be student code
+        This method will check conditions of selecting and returns
+        the selected unit info
 
         """
-        unit_data = read_data_in_file("responsible/9920_units.csv")
-        for i in unit_data:
-            if i["lesson_id"] == selected_lesson_id:
-                selected_unit = i
-                return selected_unit
+        my_id = read_data_in_file("Responsible/9920_units.csv", "lesson_id")
+        my_unit = read_data_in_file("Responsible/9920_units.csv")
+
+        if len(self.selected_units) == 0:
+            if selected_lesson_id in my_id:  # check if the selected unit id was correct
+                self.selected_units.append(selected_lesson_id)
+                for i in my_unit:
+                    if i["lesson_id"] == selected_lesson_id:
+                        selected_unit = i
+                        self.units_number += int(selected_unit['unit_number'])
+                        return selected_unit
+            else:
+                logging.error(f"{self.name} selection was not found lesson", exc_info=True)
+                message = f"The selected id was not found"
+                return message
+
+        else:
+            if selected_lesson_id in my_id:
+                if selected_lesson_id not in self.selected_units:  # check each unit was selected once
+                    if self.units_number < 20:  # check the valid range of selection
+                        for i in my_unit:
+                            if i["lesson_id"] == selected_lesson_id:
+                                selected_unit = i
+                                self.units_number += int(selected_unit['unit_number'])
+                                return selected_unit
+                    if self.units_number == 20:  # check the valid range of selection
+                        message = f"You cant select more than 20 units"
+                        return message
+
+                else:
+                    message = f"You selected {selected_lesson_id} once." \
+                              f"You cant select it more than once"
+                    return message
+            else:
+                logging.error(f"{self.name} selection was not found lesson", exc_info=True)
+                message = f"The selected id was not found"
+                return message
 
     def __str__(self):
         """
@@ -49,11 +83,11 @@ class Responsible:
         return an updated or new created file
         """
         info = get_units()
-        file_writing("responsible/9920_units.csv", info)
+        file_writing("Responsible/9920_units.csv", info)
         logging.info(f"Responsible {self.responsible_name} successfully added unit", exc_info=True)
         return f"successfully added"
 
-    def valid_selection(self, student_info):
+    def confirm_selection(self, student_info):
         """
         This will check if a unit selection list of a student is valid
         due to required units for each lesson
@@ -61,6 +95,10 @@ class Responsible:
         return valid or not
         """
         pass
+
+    # @classmethod
+    # def find_info(cls):
+    #     iformation = pandas_read_data()
 
     def __str__(self):
         return f"{self.__dict__}"
@@ -103,7 +141,7 @@ class LoginCheck:
                         logging.info(f"{name} successfully log in", exc_info=True)
                         return Student(name, student_code, term, not_passed_units, last_grade_ave,
                                        student_id)
-                # line 71 : This object can select, units or display of it's information
+                # upper line : This object can select, units or display of it's information
             else:
                 logging.error("Wrong pass", exc_info=True)
                 return f"Wrong pass"
@@ -114,13 +152,13 @@ class LoginCheck:
     def responsible_check(self):
 
         """
-        Check if US responsible log in correctly
+        Check if US Responsible log in correctly
         Similar to student_check method
-        return result of searching responsible information file
+        return result of searching Responsible information file
         """
-        my_id = read_data_in_file("responsible/responsible_up.csv", "responsible_id")
-        my_pass = read_data_in_file("responsible/responsible_up.csv", "responsible_pass")
-        my_data = read_data_in_file("responsible/9920_responsible.csv")
+        my_id = read_data_in_file("Responsible/responsible_up.csv", "responsible_id")
+        my_pass = read_data_in_file("Responsible/responsible_up.csv", "responsible_pass")
+        my_data = read_data_in_file("Responsible/9920_responsible.csv")
         self.user_id = user_pass(self.user_id, self.password)[0]  # make the str obj to hash
         if self.user_id in my_id:  # check hash file with the hashed-input
             self.password = user_pass(self.user_id, self.password)[1]
@@ -179,17 +217,28 @@ class Units:
         # if re.search(r 'pattern', self.student_code)
         # these lines show the code for more than one field
         if re.search(r'^9920', self.student_code):
-            self.data_file = pandas_read_data('responsible/9920_units.csv')
+            self.data_file = pandas_read_data('Responsible/9920_units.csv')
             return self.data_file
 
     @classmethod
-    def update_units_file(cls, file_name):
+    def update_units_file(cls, selected_unit):
         """
         This will return an update list of available units
         Updates the units capacity within the file
 
         """
-        pass
+        my_unit = read_data_in_file("Responsible/9920_units.csv")
+        for unit in my_unit:
+            if unit["lesson_id"] == selected_unit:
+                capacity = (int(unit["capacity"]) - 1)
+                unit["capacity"] = capacity
+        for i in range(len(my_unit)):
+            if i == 0:
+                file_writing("Responsible/9920_units.csv", my_unit[i], mode="w")
+            else:
+                file_writing("Responsible/9920_units.csv", my_unit[i], mode="a")
+
+        return logging.info("9920_units.csv updated")
 
 
 def valid_lesson_id():
@@ -197,13 +246,14 @@ def valid_lesson_id():
     This function returns a unique lesson id
 
     """
-    my_id = read_data_in_file("responsible/9920_units.csv", "lesson_id")
+    my_id = read_data_in_file("Responsible/9920_units.csv", "lesson_id")
+    print("0000 is a keyword")
     while True:
         lesson_id = find_digit_exception("lesson id")
-        if lesson_id not in my_id:
+        if lesson_id not in my_id and lesson_id != '0000':
             return lesson_id
         else:
-            print("That id is available")
+            print("That id is not valid")
 
 
 def get_units():
