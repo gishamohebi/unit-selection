@@ -2,6 +2,8 @@ from US_Exceptions import *
 from US_file_handle import *
 from Registering import user_pass
 import re
+import os
+import shutil
 
 
 class Student:
@@ -77,28 +79,87 @@ class Responsible:
         self.responsible_pass = responsible_pass
         self.responsible_name = responsible_name
 
-    def write_units(self):
+    def write_units(self, info):
         """
         This method will let the object  add or write to files
         return an updated or new created file
         """
-        info = get_units()
         file_writing("Responsible/9920_units.csv", info)
         logging.info(f"Responsible {self.responsible_name} successfully added unit", exc_info=True)
         return f"successfully added"
+
+    @classmethod
+    def find_selectors_info(cls):
+        """
+        This function returns a list
+        index 0 : selectors ' student codes
+        index 1 : list of selectors ' information
+        """
+        selector_codes = []
+        path = "selected units"
+        for file in os.listdir(path):
+            if file.endswith(".csv"):
+                selector_codes.append(file.strip(".csv"))
+        # get the selectors student codes from the created files after each selection
+        information = read_data_in_file("9920/9920.csv")
+        selector_info = []
+        for code in selector_codes:
+            for info in information:
+                if code == info["student_code"]:
+                    selector_info.append(info)
+                # get the selectors information
+        return [selector_codes, selector_info]
+
+    @classmethod
+    def display_selector_info(cls, student_code):
+        """
+        This function checks if the input student code is valid among selectors
+        returns either dictionary of the information or a message
+
+        """
+        selectors_code = Responsible.find_selectors_info()[0]
+        if student_code in selectors_code:
+            selectors_info = Responsible.find_selectors_info()[1]
+            for info in selectors_info:
+                if info["student_code"] == student_code:
+                    selector_info = info
+                    return selector_info
+        else:
+            message = f"{student_code} >>> was not among selectors"
+            return message
 
     def confirm_selection(self, student_info):
         """
         This will check if a unit selection list of a student is valid
         due to required units for each lesson
-        param student_info: file of each student which name of it would be the student code
-        return valid or not
-        """
-        pass
+        param student_info: dict of each student info
+        returns a file in confirmed selection directory
 
-    # @classmethod
-    # def find_info(cls):
-    #     iformation = pandas_read_data()
+        """
+        student_code = student_info["student_code"]
+        name = student_info["name"]
+        selector_path = f"selected units/{student_code}.csv"
+        students_selection = read_data_in_file(selector_path)
+        students_selection_pre = read_data_in_file(selector_path, "prerequisites")
+        if os.path.exists(f"confirmed selections/{student_code}.csv") is False:
+            for lessons in students_selection_pre:
+                if lessons != student_info["not_passed_units"]:
+                    shutil.copy(selector_path, "confirmed selections")
+
+                    logging.info(f"{name} selection was valid")
+                    message = f"{name} selection is valid"
+                    return message
+                else:
+                    for unit in students_selection:
+                        if unit["prerequisites"] == student_info["not_passed_units"]:
+                            students_selection.remove(unit)
+                    for i in range(len(students_selection)):
+                        file_writing(f"confirmed selections/{student_code}.csv", students_selection[i])
+                        message = f"some of {name}'s selection was not valid"
+                    return message
+        else:
+            message = f"Selection of {name} was confirmed once"
+            return message
 
     def __str__(self):
         return f"{self.__dict__}"
@@ -124,11 +185,16 @@ class LoginCheck:
         """
         my_id = read_data_in_file("9920/student_UP.csv", "user_name")
         my_pass = read_data_in_file("9920/student_UP.csv", "password")
+        my_hash = {}
+        for i in range(len(my_id)):
+            my_hash[my_id[i]] = my_pass[i]
+        print(my_hash)
         my_data = read_data_in_file("9920/9920.csv")
         self.user_id = user_pass(self.user_id, self.password)[0]  # make the str obj to hash
-        if self.user_id in my_id:  # check hash file with the hashed-input
-            self.password = user_pass(self.user_id, self.password)[1]
-            if self.password in my_pass:
+        self.password = user_pass(self.user_id, self.password)[1]
+        if self.user_id in my_hash.keys():
+            password = my_hash[self.user_id]
+            if self.password == password:
                 for k in range(len(my_data)):
                     student_code = user_pass(my_data[k]["id"], my_data[k]["student_code"])[1]
                     if student_code == self.password:
@@ -141,10 +207,11 @@ class LoginCheck:
                         logging.info(f"{name} successfully log in", exc_info=True)
                         return Student(name, student_code, term, not_passed_units, last_grade_ave,
                                        student_id)
-                # upper line : This object can select, units or display of it's information
+                        # upper line : This object can select, units or display of it's information
             else:
                 logging.error("Wrong pass", exc_info=True)
                 return f"Wrong pass"
+
         else:
             logging.error("Id was not found", exc_info=True)
             return f"Id Not Found"
@@ -159,10 +226,15 @@ class LoginCheck:
         my_id = read_data_in_file("Responsible/responsible_up.csv", "responsible_id")
         my_pass = read_data_in_file("Responsible/responsible_up.csv", "responsible_pass")
         my_data = read_data_in_file("Responsible/9920_responsible.csv")
+        my_hash = {}
+        for i in range(len(my_id)):
+            my_hash[my_id[i]] = my_pass[i]
+
         self.user_id = user_pass(self.user_id, self.password)[0]  # make the str obj to hash
-        if self.user_id in my_id:  # check hash file with the hashed-input
-            self.password = user_pass(self.user_id, self.password)[1]
-            if self.password in my_pass:
+        self.password = user_pass(self.user_id, self.password)[1]
+        if self.user_id in my_hash.keys():
+            password = my_hash[self.user_id]
+            if self.password == password:
                 for k in range(len(my_data)):
                     responsible_pass = user_pass(my_data[k]["responsible_id"], my_data[k]["responsible_pass"])[1]
                     if responsible_pass == self.password:
@@ -171,10 +243,11 @@ class LoginCheck:
                         responsible_name = my_data[k]["name"]
                         logging.info(f"{responsible_name} successfully log in", exc_info=True)
                         return Responsible(responsible_id, responsible_pass, responsible_name)
-                # line 101 : This object can write units and check validation of each student's selections
+                        # upper line : This object can write units and check validation of each student's selections
             else:
                 logging.error("Wrong pass", exc_info=True)
                 return f"Wrong pass"
+
         else:
             logging.error("Id was not found", exc_info=True)
             return f"Id Not Found"
@@ -251,9 +324,14 @@ def valid_lesson_id():
     while True:
         lesson_id = find_digit_exception("lesson id")
         if lesson_id not in my_id and lesson_id != '0000':
-            return lesson_id
+            if len(lesson_id) == 4:
+                return lesson_id
+            else:
+                print("That id is not valid"
+                      "this must take 4 numbers")
         else:
-            print("That id is not valid")
+            print("That id is not valid"
+                  "This id is available")
 
 
 def get_units():
@@ -289,7 +367,7 @@ def id_validation():
 
 def password_validation():
     while True:
-        password = find_digit_exception("student code")
+        password = find_digit_exception("password")
         if len(password) == 8:
             return password
         if len(password) != 8:

@@ -39,8 +39,6 @@ def file_writing(name_of_file, info, mode=None):
         writer.writerows(info)
 
 
-
-
 def writing_up_file(user_name, password, name_of_file):
     """
     this function writes the hashed user name password to the related file

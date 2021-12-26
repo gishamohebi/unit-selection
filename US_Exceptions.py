@@ -30,7 +30,7 @@ def find_str_exception(variable):
         str_value = input(f"Add your {variable}: ")
         if str_value.isdigit() is True:
             print(f"Please enter your {variable}")
-            logging.error("Wrong input format",exc_info=True)
+            logging.error("Wrong input format", exc_info=True)
         else:
             break
 

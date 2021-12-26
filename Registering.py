@@ -45,6 +45,7 @@ class RegisterStudent:
         # pattern = an item selected from codes_list
         # if re.search(r 'pattern', self.student_code)
         # these lines show the code for more than one field
+
         if re.search(r'^9920', self.student_code):
             my_passwords = read_data_in_file("9920/9920.csv", "student_code")
             my_id = read_data_in_file("9920/9920.csv", "id")
@@ -80,12 +81,12 @@ class RegisterStudent:
 
     @classmethod
     def student_code_validation(cls):
-        student_code = find_digit_exception("student code")
-        while len(student_code) != 8:
-            print("this must take 8 numbers")
+        while True:
             student_code = find_digit_exception("student code")
             if len(student_code) == 8:
                 return student_code
+            else:
+                print("this must take 8 numbers")
 
     @classmethod
     def term_validation(cls):

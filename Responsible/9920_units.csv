@@ -1,9 +1,10 @@
 lesson_id,lesson_name,professor_name,unit_number,capacity,prerequisites
-2222,math2,reza ghorbani,3,34,math1
-3333,physics3,reza kheradmand,4,39, physics2
-1111,math1,ali rezaei ,3,28,  -
+2222,math2,reza ghorbani,3,33,math1
+3333,physics3,reza kheradmand,4,38, physics2
+1111,math1,ali rezaei ,3,26,  -
 2565,physics3 ,mojtaba parhiskar,3,30,physics2
-4321,physics math1, reza heydari,3,30,  -
+4321,physics math1, reza heydari,3,29,  -
 4521,physics math2,nasrin moradi,3,30,physics math1
 3721,electromagnetism1,reza kheradmand,4,25,physics2
-4321,electromagnetism2,reza parhizkar,4,30,electromagnetism1
+4321,electromagnetism2,reza parhizkar,4,29,electromagnetism1
+1221,math2,asghar farhadi,3,20,math1
