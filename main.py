@@ -1,5 +1,5 @@
-from Registering import *
-from US_login import *
+from registering import *
+from us_login import *
 import os
 
 print("THIS IS A PROGRAM FOR STUDENT WHICH ID STARTS WITH 9920\n"
@@ -40,6 +40,7 @@ while True:
                 if type(result) != str:
                     responsible = result
                     print("successfully log in")
+                    file_name = find_file_name(responsible.responsible_pass)
                     while True:
                         print("\n1.Display info\n"
                               "2.Add Units\n"
@@ -49,8 +50,8 @@ while True:
                               )
                         key_3 = find_int_exception("menu key")
                         if key_3 == 1:
-                            responsible = responsible.__dict__
-                            for k, v in responsible.items():
+                            info = responsible.__dict__
+                            for k, v in info.items():
                                 print(f"{k}  :  {v}")
 
                         if key_3 == 2:
@@ -60,7 +61,8 @@ while True:
                             pass
 
                         if key_3 == 3:
-                            selectors_code = Responsible.find_selectors_info()[0]
+
+                            selectors_code = Responsible.find_selectors_info(file_name)[0]
                             print(f"\nThis is list of selectors\n")
                             for code in selectors_code:
                                 print(code)
@@ -73,7 +75,7 @@ while True:
                                 if key_5 == 1:
                                     while True:
                                         student_code = RegisterStudent.student_code_validation()
-                                        result = Responsible.display_selector_info(student_code)
+                                        result = Responsible.display_selector_info(student_code, file_name)
                                         # result is either an alert message or dict of student's info
                                         if type(result) != str:
                                             for k, v in result.items():
@@ -84,7 +86,7 @@ while True:
 
                                 if key_5 == 2:
                                     student_code = RegisterStudent.student_code_validation()
-                                    result = Responsible.display_selector_info(student_code)
+                                    result = Responsible.display_selector_info(student_code, file_name)
                                     if type(result) != str:
                                         message = responsible.confirm_selection(result)
                                         print(message)
@@ -97,7 +99,7 @@ while True:
                                     key_5 = OutOfRangError.new()
 
                         if key_3 == 4:
-                            student_name = read_data_in_file("9920/9920.csv", "name")
+                            student_name = read_data_in_file(f"{file_name}/{file_name}.csv", "name")
                             for i, student in enumerate(student_name):
                                 print(f"{i + 1} : {student}")
 
@@ -126,13 +128,13 @@ while True:
                         key_4 = find_int_exception("menu key")
 
                         if key_4 == 1:
-                            student = student.__dict__
-                            for k, v in student.items():
+                            info = student.__dict__
+                            for k, v in info.items():
                                 print(f"{k}  :  {v}")
 
                         if key_4 == 2:
                             if os.path.exists(f"selected units/{student.student_code}.csv"):
-                                # check if the user is selectiong for the first time or not
+                                # check if the user is selecting for the first time or not
                                 logging.error(f"{student.name} tried for another selection", exc_info=True)
                                 print("You cannot select units more than once")
                             else:
