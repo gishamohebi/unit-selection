@@ -2,7 +2,7 @@ from registering import *
 from us_login import *
 import os
 
-print("THIS IS A PROGRAM FOR STUDENT WHICH ID STARTS WITH 9920\n"
+print("THIS IS A PROGRAM FOR STUDENT WHICH ID STARTS WITH 9920 AND 9921\n"
       "OTHERS WILL SIMPLY ADD TO JSON FILE "
       )
 
