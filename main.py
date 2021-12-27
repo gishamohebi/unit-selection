@@ -119,7 +119,6 @@ while True:
                     print("successfully log in")
 
                     while True:
-                        print("display info works others are not complete")
                         print("1.Display info\n"
                               "2.Unit Selection\n"
                               "3.Display Selected Units\n"
