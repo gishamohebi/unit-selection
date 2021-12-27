@@ -333,11 +333,11 @@ def get_units():
     prerequisites = find_str_exception("prerequisites")
     info = {
         'lesson_id ': lesson_id,
-        'lesson_name': lesson_name,
+        'lesson_name': lesson_name.lower(),
         'professor_name': professor_name,
         'unit_number': unit_number,
         'capacity': capacity,
-        'prerequisites': prerequisites
+        'prerequisites': prerequisites.lower()
     }
     return info
 
