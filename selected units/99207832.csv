@@ -1,0 +1,5 @@
+lesson_id,lesson_name,professor_name,unit_number,capacity,prerequisites
+2222,math2,reza ghorbani,3,34,math1
+1111,math1,ali rezaei ,3,27,  -
+4321,physics math1, reza heydari,3,30,  -
+3333,physics3,reza kheradmand,4,39, physics2
